@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>My Project using JSONPowerDB</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    </head>
+    <body>
+        <center><h1>User Products page</h1></center>
+    <center><h1>Login Page</h1></center>
+    <form action="" method="post" id="regForm">
+        <table border="0" align="center">
+            <tbody>
+                
+                
+               
+
+                <tr>
+                    <td align="left"><input type="button" value="My Profile" onclick="userProfile();"/></td>
+                    <td align="right"><input type="button" value="Log Out"  onclick="userLogout()"></td>
+                </tr>
+
+            </tbody>
+            
+        </table>
+    </form>
+
+    <script>
+       
+       function userProfile(){
+           window.location.href = "profile.html";
+       }
+        
+       function userLogout(){
+           sessionStorage.clear();
+           window.location.href = "index.html";
+       }
+
+       
+        
+    </script>
+</body>
+</html>
+

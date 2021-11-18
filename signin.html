@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>My Project using JSONPowerDB</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        
+        <script src="http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
+
+    </head>
+    <body>
+    <center><h1>SignIn</h1></center>
+    <form action="" method="post" id="signForm1">
+        <table border="0" align="center">
+            <tbody>
+                
+                <tr>
+                    <td><label for="uid">UserId: </label></td>
+                    <td><input id="uid" maxlength="50" placeholder="Should be unique" name="uid" type="text" /></td>
+                </tr>
+                
+                
+
+                <tr>
+                    <td><label for="password">Password:</label></td>
+                    <td><input id="password" maxlength="50" name="password"
+                               type="password" /></td>
+                </tr>
+
+                
+
+                
+                
+
+               
+
+                <tr>
+                    <td align="right"><input type="button" value="SignIn" onclick="loginUser();"/></td>
+                </tr>
+
+            </tbody>
+            <div id="err" style="display:none"></div>
+        </table>
+    </form>
+
+    <script>
+        function createPUTRequest(connToken, jsonObj, dbName, relName) {
+            var putRequest = "{\n"
+                    + "\"token\" : \""
+                    + connToken
+                    + "\","
+                    + "\"dbName\": \""
+                    + dbName
+                    + "\",\n" + "\"cmd\" : \"PUT\",\n"
+                    + "\"rel\" : \""
+                    + relName + "\","
+                    + "\"jsonStr\": \n"
+                    + jsonObj
+                    + "\n"
+                    + "}";
+            return putRequest;
+        }
+        function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+            var url = dbBaseUrl + apiEndPointUrl;
+            var jsonObj;
+            $.post(url, reqString, function (result) {
+                jsonObj = JSON.parse(result);
+            }).fail(function (result) {
+                var dataJsonObj = result.responseText;
+                jsonObj = JSON.parse(dataJsonObj);
+            });
+            return jsonObj;
+        }
+
+        function validateAndGetFormData() {
+            
+            //var name = document.getElementById("name").value;
+            var uid = document.getElementById("uid").value;
+           // var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            
+            var jsonStrObj = {
+                Name: name,
+                UserId: uid,
+                Email: email,
+                Password: password,
+            };
+            return JSON.stringify(jsonStrObj);
+        }
+
+        function loginUser() {
+
+          // alert("inside loginuser method")
+            //var jsonStr = validateAndGetFormData();
+           /* if (jsonStr === "") {
+                return;
+            }*/
+            /* var putReqStr = createPUTRequest("90938585|-31948825849890390|90946752",
+                    jsonStr, "Venkat_Exp01", "user_info");
+            alert(putReqStr);
+            jQuery.ajaxSetup({async: false});
+            var resultObj = executeCommand(putReqStr,
+                    "http://api.login2explore.com:5577", "/api/iml");
+            jQuery.ajaxSetup({async: true});
+            alert( "INSERTED "+JSON.stringify(resultObj));*/
+         var token = "90938585|-31948825849890390|90946752";
+            var dbname = "Venkat_Exp01";
+            var relationName = "my_users";
+            var roll=document.getElementById("uid").value;
+           // alert("get rolling---"+roll);
+             var jsonStr = {
+                UserId : roll
+            };
+           // alert(JSON.stringify(jsonStr));
+         var reqString2 = createGETRequest(token, dbname, relationName, JSON.stringify(jsonStr));
+            //var reqString=createGET_RECORDRequest(token, dbName, relName, roll);
+           // alert(reqString2);
+            jQuery.ajaxSetup({async: false});
+            var resultObj = executeCommand(reqString2,
+                    "http://api.login2explore.com:5577", "/api/irl");
+            jQuery.ajaxSetup({async: true});
+            
+            var data = JSON.stringify(resultObj);
+            
+            
+            // alert(resultObj.status);
+             
+           
+           // alert(resultObj.UserId+"------getting UserId");
+            var res = data.split("\"");
+           // alert(res);
+            var res1=jQuery.parseJSON(data);
+           // alert(res1);
+           // alert(res1.Email+"---"+res1.Name+"---"+res1.UserId+"---"+res1.Password);
+           var text;
+           var name01=res[14].replace("\\","");
+           var email01=res[6].replace("\\","");
+           var password01=res[18].replace("\\","");
+           var userId01=res[10].replace("\\","");
+          
+             if(resultObj.status===200){
+                 // alert(resultObj.status);
+                 var useId=document.getElementById("uid").value;
+                 var pass=document.getElementById("password").value;
+                 //alert("inside status check---"+password01+userId01+pass+useId);
+                 if(useId===userId01 && pass===password01){
+                    var userId = document.getElementById("uid").value;
+                    sessionStorage.setItem("uid", userId);
+                    alert("Status code is  "+resultObj.status+"  seems like your request is successful");
+                  window.location.href = "account.html";
+                    //window.location.href = "account.html";
+                  }else{
+                       alert("Status code is  "+resultObj.status+"  seems like your request may not successful");
+                       return;
+                 } 
+                 
+             }else{
+                  alert("Status code is  "+resultObj.status+"  seems like your request may not successful");
+                       return;
+               //window.location.href = "/JSONEX/delete.html";
+           }
+            
+           
+           
+            
+           
+           
+           document.getElementById("regForm").reset(); 
+        }
+    </script>
+</body>
+</html>
+
+
